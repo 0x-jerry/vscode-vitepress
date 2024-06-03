@@ -23,7 +23,18 @@
   ],
   "contributes": {
     "configuration": {},
-    "commands": [],
+    "commands": [
+      {
+        "title": "Start VitePress Preview",
+        "command": "vp.preview.start",
+        "category": "VitePress"
+      },
+      {
+        "title": "Stop VitePress Preview",
+        "command": "vp.preview.stop",
+        "category": "VitePress"
+      }
+    ],
     "keybindings": [],
     "viewsContainers": {},
     "views": {},
