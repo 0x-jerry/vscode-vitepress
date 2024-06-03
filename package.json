@@ -28,6 +28,7 @@
   ],
   "main": "./dist/extension.js",
   "browser": "./dist/extension.js",
+  "icon": "resources/logo.png",
   "extensionKind": [
     "workspace"
   ],
