@@ -1,5 +1,5 @@
 {
-  "name": "vscode-vp-preview",
+  "name": "vp-preview",
   "displayName": "VitePress Preview",
   "description": "Use vscode builtin simple browser to preview VitePress pages.",
   "version": "0.0.1",
