@@ -35,6 +35,12 @@
           "type": "number",
           "default": 4001
         },
+        "vp.autoStart": {
+          "scope": "window",
+          "title": "start VitePress devServer when open workspace.",
+          "type": "boolean",
+          "default": false
+        },
         "vp.baseDir": {
           "scope": "machine-overridable",
           "title": "VitePress docs folder, relative path to current workspace.",

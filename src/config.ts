@@ -10,11 +10,17 @@ export interface Config {
    * @default 4001
    */
   port?: number
+
+  /**
+   * @default false
+   */
+  autoStart?: boolean
 }
 
 const defaultConfig: Required<Config> = {
   baseDir: '',
-  port: 4001
+  port: 4001,
+  autoStart: false
 }
 
 export function getConfig<Key extends keyof Config = keyof Config>(key: Key) {
