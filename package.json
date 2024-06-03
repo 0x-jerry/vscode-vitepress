@@ -39,7 +39,7 @@
           "scope": "machine-overridable",
           "title": "VitePress docs folder, relative path to current workspace.",
           "type": "string",
-          "default": "docs"
+          "default": ""
         }
       }
     },

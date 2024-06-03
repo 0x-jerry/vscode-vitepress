@@ -115,12 +115,12 @@ export class PreviewPanel implements Disposable {
 
     if (!workspaceFolder) return
 
+    const relativePath = uri.fsPath.slice(workspaceFolder.uri.fsPath.length)
+
     const CONFIG = {
       host: `http://localhost:${getConfig('port')}`,
       routeDir: getConfig('baseDir')
     }
-
-    const relativePath = uri.fsPath.slice(workspaceFolder.uri.fsPath.length)
 
     if (
       !relativePath.startsWith(CONFIG.routeDir) ||
@@ -150,13 +150,13 @@ export class PreviewPanel implements Disposable {
     let endTime = now + 15 * 1000
     while (now < endTime) {
       try {
-        const resp = await fetch(url)
+        await fetch(url)
 
-        console.log('x', resp)
-        return true
+        // VitePress start success
+        return
       } catch (error) {
         // failed
-        console.error(error)
+        // ignore
       }
 
       await sleep(500)
@@ -185,10 +185,10 @@ export class PreviewPanel implements Disposable {
 
   stop() {
     this.editorChangeListener?.dispose()
-    this.taskExecution?.terminate()
-
-    this.taskExecution = undefined
     this.editorChangeListener = undefined
+
+    this.taskExecution?.terminate()
+    this.taskExecution = undefined
 
     this.statusBar.stopped()
   }
