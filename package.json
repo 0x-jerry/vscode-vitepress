@@ -2,7 +2,7 @@
   "name": "vp-preview",
   "displayName": "VitePress Preview",
   "description": "Use vscode builtin simple browser to preview VitePress pages.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MIT",
   "author": {
     "name": "Jerry wang",
@@ -12,8 +12,13 @@
   "engines": {
     "vscode": "^1.60.0"
   },
-  "categories": ["Other"],
-  "keywords": ["vitepress", "live server"],
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "vitepress",
+    "live server"
+  ],
   "extensionPack": [
     "vscode.simple-browser"
   ],
