@@ -66,6 +66,7 @@ export class PreviewPanel implements Disposable {
   _openUrl(url: string) {
     if (this.currentUrl === url) return
 
+    this.currentUrl = url
     // https://github.com/microsoft/vscode/blob/403294d92b4fbcdad61bb74635a8e5e145151aaa/extensions/simple-browser/src/extension.ts#L58
     commands.executeCommand('simpleBrowser.api.open', url, {
       viewColumn: ViewColumn.Beside
