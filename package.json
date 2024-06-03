@@ -1,7 +1,7 @@
 {
-  "name": "tpl-vscode-extension",
-  "displayName": "Vscode extension template",
-  "description": "template",
+  "name": "vscode-vp-preview",
+  "displayName": "VitePress Preview",
+  "description": "Use vscode builtin simple browser to preview VitePress pages.",
   "version": "0.0.1",
   "license": "MIT",
   "author": {
@@ -12,15 +12,17 @@
   "engines": {
     "vscode": "^1.60.0"
   },
-  "categories": [],
-  "keywords": [],
+  "categories": ["Other"],
+  "keywords": ["vitepress", "live server"],
+  "extensionPack": [
+    "vscode.simple-browser"
+  ],
   "activationEvents": [
     "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "browser": "./dist/extension.js",
   "extensionKind": [
-    "ui",
     "workspace"
   ],
   "contributes": {

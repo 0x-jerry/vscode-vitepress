@@ -2,7 +2,7 @@ import { workspace } from 'vscode'
 
 export interface Config {
   /**
-   * @default docs
+   * @default ''
    */
   baseDir?: string
 
@@ -13,7 +13,7 @@ export interface Config {
 }
 
 const defaultConfig: Required<Config> = {
-  baseDir: 'docs',
+  baseDir: '',
   port: 4001
 }
 
