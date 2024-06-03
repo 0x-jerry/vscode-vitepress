@@ -14,7 +14,9 @@
   },
   "categories": [],
   "keywords": [],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "browser": "./dist/extension.js",
   "extensionKind": [
@@ -22,7 +24,23 @@
     "workspace"
   ],
   "contributes": {
-    "configuration": {},
+    "configuration": {
+      "title": "VitePress",
+      "properties": {
+        "vp.host": {
+          "scope": "window",
+          "title": "VitePress devServer port.",
+          "type": "number",
+          "default": 4001
+        },
+        "vp.baseDir": {
+          "scope": "machine-overridable",
+          "title": "VitePress docs folder, relative path to current workspace.",
+          "type": "string",
+          "default": "docs"
+        }
+      }
+    },
     "commands": [
       {
         "title": "Start VitePress Preview",
@@ -34,13 +52,7 @@
         "command": "vp.preview.stop",
         "category": "VitePress"
       }
-    ],
-    "keybindings": [],
-    "viewsContainers": {},
-    "views": {},
-    "menus": {},
-    "grammars": [],
-    "snippets": []
+    ]
   },
   "scripts": {
     "vscode:prepublish": "tsup",
@@ -60,6 +72,7 @@
     ]
   },
   "devDependencies": {
+    "@0x-jerry/utils": "^2.3.0",
     "@0x-jerry/x-release": "^2.2.2",
     "@types/node": "^20.12.12",
     "@types/vscode": "^1.60.0",

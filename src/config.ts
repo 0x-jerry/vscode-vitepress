@@ -12,13 +12,17 @@ export interface Config {
   port?: number
 }
 
-const defaultConfig: Config = {
-    baseDir: 'docs',
-    port: 4001
+const defaultConfig: Required<Config> = {
+  baseDir: 'docs',
+  port: 4001
 }
 
 export function getConfig<Key extends keyof Config = keyof Config>(key: Key) {
   type KeyType = Config[Key]
 
-  return workspace.getConfiguration('vitepress').get<KeyType>(key) || defaultConfig[key]
+  const section = 'vp'
+
+  const c = workspace.getConfiguration(section).get<KeyType>(key)
+
+  return c ?? defaultConfig[key]
 }

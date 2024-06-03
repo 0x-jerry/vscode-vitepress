@@ -1,10 +1,4 @@
-import {
-  ViewColumn,
-  commands,
-  window,
-  workspace,
-  type ExtensionContext
-} from 'vscode'
+import { type ExtensionContext } from 'vscode'
 import { PreviewPanel } from './PreviewPanel'
 
 export async function activate(context: ExtensionContext) {
