@@ -1,0 +1,59 @@
+{
+  "name": "tpl-vscode-extension",
+  "displayName": "Vscode extension template",
+  "description": "template",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": {
+    "name": "Jerry wang",
+    "email": "x.jerry.wang@gmail.com"
+  },
+  "publisher": "fantasy",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [],
+  "keywords": [],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "browser": "./dist/extension.js",
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "contributes": {
+    "configuration": {},
+    "commands": [],
+    "keybindings": [],
+    "viewsContainers": {},
+    "views": {},
+    "menus": {},
+    "grammars": [],
+    "snippets": []
+  },
+  "scripts": {
+    "vscode:prepublish": "tsup",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "publish": "vsce publish --no-dependencies",
+    "release": "x-release --publish false"
+  },
+  "tsup": {
+    "entry": [
+      "src/extension.ts"
+    ],
+    "sourcemap": true,
+    "clean": true,
+    "external": [
+      "vscode"
+    ]
+  },
+  "devDependencies": {
+    "@0x-jerry/x-release": "^2.2.2",
+    "@types/node": "^20.12.12",
+    "@types/vscode": "^1.60.0",
+    "@vscode/vsce": "^2.26.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}
