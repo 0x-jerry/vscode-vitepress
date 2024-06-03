@@ -4,11 +4,12 @@
   "description": "Use vscode builtin simple browser to preview VitePress pages.",
   "version": "0.1.0",
   "license": "MIT",
-  "author": {
-    "name": "Jerry wang",
-    "email": "x.jerry.wang@gmail.com"
-  },
+  "author": "Jerry wang <x.jerry.wang@gmail.com>",
   "publisher": "fantasy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0x-jerry/vscode-vitepress"
+  },
   "engines": {
     "vscode": "^1.60.0"
   },
