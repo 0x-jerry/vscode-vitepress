@@ -2,6 +2,7 @@ import {
   Disposable,
   ShellExecution,
   Task,
+  TaskRevealKind,
   TaskScope,
   ViewColumn,
   commands,
@@ -74,15 +75,6 @@ export class PreviewPanel implements Disposable {
   }
 
   async _startVPTask() {
-    const exists = tasks.taskExecutions.find(
-      (n) => n.task.name === VP_TASK_NAME
-    )
-
-    if (exists) {
-      this.taskExecution = exists
-      return exists
-    }
-
     const port = getConfig('port')
 
     const task = new Task(
@@ -92,6 +84,9 @@ export class PreviewPanel implements Disposable {
       'vscode extension',
       new ShellExecution(`npx vitepress --host --port ${port}`)
     )
+
+    task.isBackground = true
+    task.presentationOptions.reveal = TaskRevealKind.Silent
 
     const execution = await tasks.executeTask(task)
     this.taskExecution = execution
