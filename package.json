@@ -2,7 +2,7 @@
   "name": "vp-preview",
   "displayName": "VitePress Preview",
   "description": "Use vscode builtin simple browser to preview VitePress pages.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "author": "Jerry wang <x.jerry.wang@gmail.com>",
   "publisher": "fantasy",
