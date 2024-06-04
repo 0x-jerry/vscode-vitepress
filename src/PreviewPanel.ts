@@ -28,6 +28,8 @@ export class PreviewPanel implements Disposable {
 
   currentUrl?: string
 
+  vpServerStarted?: boolean
+
   statusBar = new StatusBar()
 
   get isStarted() {
@@ -71,7 +73,7 @@ export class PreviewPanel implements Disposable {
   _openUrl(url: string) {
     if (this.currentUrl === url) return
 
-    if (this.taskExecution) {
+    if (this.vpServerStarted) {
       this.currentUrl = url
     }
 
@@ -149,13 +151,13 @@ export class PreviewPanel implements Disposable {
 
     let now = Date.now()
 
-    let endTime = now + 15 * 1000
-    while (now < endTime) {
+    const maxTime = now + 15 * 1000
+    while (now < maxTime) {
       try {
         await fetch(url)
 
         // VitePress start success
-        return
+        return true
       } catch (error) {
         // failed
         // ignore
@@ -171,6 +173,7 @@ export class PreviewPanel implements Disposable {
   async start() {
     if (this.isStarted) return
 
+    this.vpServerStarted = false
     this.statusBar.spinning()
 
     this.editorChangeListener = window.onDidChangeActiveTextEditor((e) => {
@@ -179,7 +182,7 @@ export class PreviewPanel implements Disposable {
 
     this.taskExecution = await this._startVPTask()
 
-    await this._detectVPServer()
+    this.vpServerStarted = await this._detectVPServer()
 
     this._navigateCurrentPage()
     this.statusBar.started()
@@ -193,6 +196,7 @@ export class PreviewPanel implements Disposable {
     this.taskExecution = undefined
 
     this.currentUrl = undefined
+    this.vpServerStarted = undefined
     this.statusBar.stopped()
   }
 
