@@ -73,6 +73,7 @@ export class PreviewPanel implements Disposable {
   _openUrl(url: string) {
     if (this.currentUrl === url) return
 
+    // todo, check if "simple browser webview" is exists
     if (this.vpServerStarted) {
       this.currentUrl = url
     }
