@@ -18,7 +18,7 @@ importers:
         specifier: ^20.14.11
         version: 20.14.11
       '@types/vscode':
-        specifier: ^1.91.0
+        specifier: ^1.60.0
         version: 1.91.0
       '@vscode/vsce':
         specifier: ^2.31.1
