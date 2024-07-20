@@ -3,3 +3,4 @@ playground
 docs
 .github
 .vscode
+*.yaml
