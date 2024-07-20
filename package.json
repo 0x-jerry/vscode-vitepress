@@ -87,12 +87,12 @@
     ]
   },
   "devDependencies": {
-    "@0x-jerry/utils": "^2.3.0",
+    "@0x-jerry/utils": "^2.4.3",
     "@0x-jerry/x-release": "^2.2.2",
-    "@types/node": "^20.12.12",
-    "@types/vscode": "^1.60.0",
-    "@vscode/vsce": "^2.26.1",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "@types/node": "^20.14.11",
+    "@types/vscode": "^1.91.0",
+    "@vscode/vsce": "^2.31.1",
+    "tsup": "^8.2.0",
+    "typescript": "^5.5.3"
   }
 }

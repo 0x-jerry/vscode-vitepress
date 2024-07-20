@@ -1,6 +1,6 @@
 # VitePress Preview
 
-A very small extension(only 8KB) which use vscode builtin simple browser to preview VitePress pages.
+A very small extension which use vscode builtin simple browser to preview VitePress pages.
 
 ## Screenshot
 
