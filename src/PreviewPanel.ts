@@ -70,18 +70,21 @@ export class PreviewPanel implements Disposable {
     this._disposables.push(t)
   }
 
-  _openUrl(url: string) {
-    if (this.currentUrl === url) return
+  async _openUrl(url: string) {
+    const hasSimpleBrowserOpened = !!window.tabGroups.all.find((group) => {
+      return group.tabs.find((t) => t.label === 'Simple Browser')
+    })
 
-    // todo, check if "simple browser webview" is exists
+    if (this.currentUrl === url && hasSimpleBrowserOpened) return
+
     if (this.vpServerStarted) {
       this.currentUrl = url
     }
 
     // https://github.com/microsoft/vscode/blob/403294d92b4fbcdad61bb74635a8e5e145151aaa/extensions/simple-browser/src/extension.ts#L58
-    commands.executeCommand('simpleBrowser.api.open', url, {
+    await commands.executeCommand('simpleBrowser.api.open', url, {
       viewColumn: ViewColumn.Beside,
-      preserveFocus: true,
+      preserveFocus: true
     })
   }
 
@@ -113,7 +116,7 @@ export class PreviewPanel implements Disposable {
     }
   }
 
-  _navigateCurrentPage() {
+  async _navigateCurrentPage() {
     if (!window.activeTextEditor) return
 
     const uri = window.activeTextEditor.document.uri
@@ -145,7 +148,7 @@ export class PreviewPanel implements Disposable {
 
     const url = CONFIG.host + pathname
 
-    this._openUrl(url)
+    await this._openUrl(url)
   }
 
   async _detectVPServer() {
