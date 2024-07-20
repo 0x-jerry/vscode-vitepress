@@ -17,7 +17,7 @@
     "Other"
   ],
   "keywords": [
-    "vitepress",
+    "VitePress",
     "live server"
   ],
   "extensionPack": [
@@ -36,15 +36,15 @@
     "configuration": {
       "title": "VitePress",
       "properties": {
-        "vp.host": {
+        "vp.port": {
           "scope": "window",
-          "description": "VitePress devServer port.",
+          "description": "VitePress server port.",
           "type": "number",
           "default": 4001
         },
         "vp.autoStart": {
           "scope": "window",
-          "description": "start VitePress devServer when open workspace.",
+          "description": "Start VitePress server when open workspace.",
           "type": "boolean",
           "default": false
         },
@@ -58,12 +58,12 @@
     },
     "commands": [
       {
-        "title": "Start VitePress Preview",
+        "title": "Start Preview Server",
         "command": "vp.preview.start",
         "category": "VitePress"
       },
       {
-        "title": "Stop VitePress Preview",
+        "title": "Stop Preview Server",
         "command": "vp.preview.stop",
         "category": "VitePress"
       }
