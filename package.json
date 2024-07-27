@@ -87,7 +87,7 @@
     ]
   },
   "devDependencies": {
-    "@0x-jerry/utils": "^2.4.3",
+    "@0x-jerry/utils": "^3.0.0",
     "@0x-jerry/x-release": "^2.2.2",
     "@types/node": "^20.14.11",
     "@types/vscode": "^1.60.0",
