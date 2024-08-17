@@ -91,7 +91,7 @@
     "@0x-jerry/x-release": "^2.2.2",
     "@types/node": "^20.14.11",
     "@types/vscode": "^1.60.0",
-    "@vscode/vsce": "^2.31.1",
+    "@vscode/vsce": "^3.0.0",
     "tsup": "^8.2.0",
     "typescript": "^5.5.3"
   }
