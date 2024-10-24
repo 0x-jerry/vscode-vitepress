@@ -128,17 +128,20 @@ export class PreviewPanel implements Disposable {
 
     const CONFIG = {
       host: `http://localhost:${getConfig('port')}`,
-      routeDir: getConfig('baseDir')
+      /**
+       * VitePress base url
+       */
+      base: getConfig('base')
     }
 
     if (
-      !relativePath.startsWith(CONFIG.routeDir) ||
+      !relativePath.startsWith(CONFIG.base) ||
       !relativePath.endsWith('.md')
     ) {
       return
     }
 
-    const route = relativePath.replace(CONFIG.routeDir, '')
+    const route = relativePath.replace(CONFIG.base, '')
 
     const pathname = route
       .replaceAll('\\', '/')

@@ -48,9 +48,15 @@
           "type": "boolean",
           "default": false
         },
-        "vp.baseDir": {
+        "vp.docsDir": {
           "scope": "machine-overridable",
           "description": "VitePress docs folder, relative path to current workspace.",
+          "type": "string",
+          "default": ""
+        },
+        "vp.base": {
+          "scope": "machine-overridable",
+          "description": "VitePress base config, the base url of the docs.",
           "type": "string",
           "default": ""
         }

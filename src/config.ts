@@ -4,7 +4,12 @@ export interface Config {
   /**
    * @default ''
    */
-  baseDir?: string
+  docsDir?: string
+
+  /**
+   * @default ''
+   */
+  base?: string
 
   /**
    * @default 4001
@@ -18,7 +23,8 @@ export interface Config {
 }
 
 const defaultConfig: Required<Config> = {
-  baseDir: '',
+  docsDir: '',
+  base: '',
   port: 4001,
   autoStart: false
 }
