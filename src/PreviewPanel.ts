@@ -16,6 +16,8 @@ import { Commands } from './commands'
 import { getConfig } from './config'
 import { StatusBar } from './StatusBar'
 import { sleep } from '@0x-jerry/utils'
+import path from 'path'
+import { URL } from 'url'
 
 const VP_TASK_NAME = 'VP_PREVIEW'
 
@@ -90,13 +92,16 @@ export class PreviewPanel implements Disposable {
 
   async _startVPTask() {
     const port = getConfig('port')
+    const docsDir = getConfig('docsDir')
 
     const task = new Task(
       { type: 'VP' },
       TaskScope.Workspace,
       VP_TASK_NAME,
       'vscode extension',
-      new ShellExecution(`npx vitepress --host --port ${port}`)
+      new ShellExecution(
+        `npx vitepress --host --port ${port} dev ${JSON.stringify(docsDir)}`
+      )
     )
 
     task.isBackground = true
@@ -122,26 +127,32 @@ export class PreviewPanel implements Disposable {
     const uri = window.activeTextEditor.document.uri
     const workspaceFolder = workspace.getWorkspaceFolder(uri)
 
+    if (!uri.fsPath.endsWith('.md')) {
+      return
+    }
+
     if (!workspaceFolder) return
 
-    const relativePath = uri.fsPath.slice(workspaceFolder.uri.fsPath.length)
+    let relativeFilePath = path.relative(workspaceFolder.uri.fsPath, uri.fsPath)
 
     const CONFIG = {
       host: `http://localhost:${getConfig('port')}`,
+      docsDir: getConfig('docsDir'),
       /**
        * VitePress base url
        */
       base: getConfig('base')
     }
 
-    if (
-      !relativePath.startsWith(CONFIG.base) ||
-      !relativePath.endsWith('.md')
-    ) {
-      return
+    if (CONFIG.docsDir) {
+      if (!relativeFilePath.startsWith(CONFIG.docsDir)) {
+        return
+      }
+
+      relativeFilePath = relativeFilePath.slice(CONFIG.docsDir.length)
     }
 
-    const route = relativePath.replace(CONFIG.base, '')
+    const route = path.join(CONFIG.base, relativeFilePath)
 
     const pathname = route
       .replaceAll('\\', '/')
@@ -149,9 +160,10 @@ export class PreviewPanel implements Disposable {
       .replace('index.md', '')
       .replace('.md', '')
 
-    const url = CONFIG.host + pathname
+    const url = new URL(CONFIG.host)
+    url.pathname = pathname + (pathname === CONFIG.base ? '/' : '')
 
-    await this._openUrl(url)
+    await this._openUrl(url.toString())
   }
 
   async _detectVPServer() {
