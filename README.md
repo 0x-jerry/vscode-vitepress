@@ -16,6 +16,8 @@ There are two commands:
 ## Configuration
 
 - `vp.autStart`: Start VitePress server when open workspace, default is false.
+- `vp.base`: VitePress base config, the base url of the docs. example: "/blog"
+- `vp.docsDir`: VitePress docs folder, relative path to current workspace. example: "docs". You need to restart VitePress server if you change this option"
 - `vp.port`: VitePress server port, default is 4001.
 
 ## Bugs
