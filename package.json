@@ -50,7 +50,7 @@
         },
         "vp.docsDir": {
           "scope": "machine-overridable",
-          "description": "VitePress docs folder, relative path to current workspace. example: \"docs\"\nYou need to restart VitePress server if you change this option",
+          "description": "VitePress docs folder, relative path to current workspace. example: \"docs\"\nYou need to restart VitePress preview server if you change this option",
           "type": "string",
           "default": ""
         },
