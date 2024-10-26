@@ -22,6 +22,8 @@ There are two commands:
 
 ## Bugs
 
-If you found any bugs, please open an issue.
+If you find any bugs, please [open an issue][open-issue].
 
 Enjoy!
+
+[open-issue]: https://github.com/0x-jerry/vscode-vitepress/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=
