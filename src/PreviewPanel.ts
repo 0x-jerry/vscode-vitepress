@@ -1,5 +1,5 @@
 import {
-  Disposable,
+  type Disposable,
   ShellExecution,
   Task,
   TaskRevealKind,
@@ -9,8 +9,7 @@ import {
   tasks,
   window,
   workspace,
-  type ExtensionContext,
-  type TaskExecution
+  type ExtensionContext
 } from 'vscode'
 import { Commands } from './commands'
 import { getConfig } from './config'
@@ -26,7 +25,7 @@ export class PreviewPanel implements Disposable {
 
   editorChangeListener?: Disposable
 
-  taskExecution?: TaskExecution
+  taskHandler?: Disposable
 
   currentUrl?: string
 
@@ -44,6 +43,14 @@ export class PreviewPanel implements Disposable {
     this._addDisposable(
       tasks.onDidEndTask((e) => {
         if (e.execution.task.name === VP_TASK_NAME) {
+          this.stop()
+        }
+      })
+    )
+
+    this._addDisposable(
+      window.onDidCloseTerminal((e) => {
+        if (e.name === VP_TASK_NAME) {
           this.stop()
         }
       })
@@ -91,6 +98,13 @@ export class PreviewPanel implements Disposable {
   }
 
   async _startVPTask() {
+    const existsTask = window.terminals.find((t) => t.name === VP_TASK_NAME)
+
+    if (existsTask && existsTask.exitStatus == null) {
+      this.taskHandler = existsTask
+      return
+    }
+
     const port = getConfig('port')
     const docsDir = getConfig('docsDir')
 
@@ -108,9 +122,12 @@ export class PreviewPanel implements Disposable {
     task.presentationOptions.reveal = TaskRevealKind.Silent
 
     const execution = await tasks.executeTask(task)
-    this.taskExecution = execution
 
-    return execution
+    this.taskHandler = {
+      dispose() {
+        execution.terminate()
+      }
+    }
   }
 
   toggle() {
@@ -200,7 +217,7 @@ export class PreviewPanel implements Disposable {
       this._navigateCurrentPage()
     })
 
-    this.taskExecution = await this._startVPTask()
+    await this._startVPTask()
 
     this.vpServerStarted = await this._detectVPServer()
 
@@ -212,8 +229,8 @@ export class PreviewPanel implements Disposable {
     this.editorChangeListener?.dispose()
     this.editorChangeListener = undefined
 
-    this.taskExecution?.terminate()
-    this.taskExecution = undefined
+    this.taskHandler?.dispose()
+    this.taskHandler = undefined
 
     this.currentUrl = undefined
     this.vpServerStarted = undefined
