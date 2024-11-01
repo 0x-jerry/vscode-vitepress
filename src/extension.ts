@@ -8,16 +8,15 @@ import {
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { getConfig } from './config'
 import { Commands } from './commands'
-import path from 'path'
 import type { UserConfig } from 'vitepress'
-import { readVitePressConfig } from './vitepress'
+import { readVitePressConfig, resolveVitePressUrl } from './vitepress'
 
 export async function activate(context: ExtensionContext) {
   console.log('activate')
 
   const vitepress = {
     loaded: false,
-    config: null as UserConfig | null,
+    config: undefined as UserConfig | undefined,
   }
 
   const simple = new SimpleServer({
@@ -27,7 +26,7 @@ export async function activate(context: ExtensionContext) {
       const port = getConfig('port')
       const docsDir = getConfig('docsDir')
       vitepress.loaded = false
-      vitepress.config = null
+      vitepress.config = undefined
 
       return {
         commandLine: `npx vitepress --host --port ${port} dev ${JSON.stringify(
@@ -53,25 +52,10 @@ export async function activate(context: ExtensionContext) {
         return
       }
 
-      let relativeFilePath = path.relative(
-        workspaceFolder.uri.fsPath,
-        uri.fsPath,
-      )
-
-      const CONFIG = {
-        docsDir: getConfig('docsDir'),
-      }
-
-      if (CONFIG.docsDir) {
-        if (!relativeFilePath.startsWith(CONFIG.docsDir)) {
-          return
-        }
-
-        relativeFilePath = relativeFilePath.slice(CONFIG.docsDir.length)
-      }
+      const docsDir = getConfig('docsDir')
 
       if (!vitepress.loaded) {
-        const vitePressRoot = Uri.joinPath(workspaceFolder.uri, CONFIG.docsDir)
+        const vitePressRoot = Uri.joinPath(workspaceFolder.uri, docsDir)
 
         try {
           vitepress.config = await readVitePressConfig(vitePressRoot)
@@ -82,29 +66,18 @@ export async function activate(context: ExtensionContext) {
         vitepress.loaded = true
       }
 
-      if (vitepress.config) {
-        const base = vitepress.config.base || ''
+      const pathname = resolveVitePressUrl({
+        vitePressRoot: workspaceFolder.uri,
+        currentFile: uri,
+        config: vitepress.config,
+        docsDir,
+      })
 
-        if (vitepress.config.srcDir) {
-          if (!relativeFilePath.startsWith(vitepress.config.srcDir)) {
-            return
-          }
-
-          relativeFilePath = relativeFilePath.slice(
-            vitepress.config.srcDir.length,
-          )
-        }
-
-        relativeFilePath = path.join(base, relativeFilePath)
+      if (pathname == null) {
+        return
       }
 
-      const pathname = relativeFilePath
-        .replaceAll('\\', '/')
-        .replace('/index.md', '')
-        .replace('index.md', '')
-        .replace('.md', '')
-
-      url.pathname = pathname + (pathname === vitepress.config?.base ? '/' : '')
+      url.pathname = pathname
 
       return url.toString()
     },
