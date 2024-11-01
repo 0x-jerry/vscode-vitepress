@@ -13,7 +13,7 @@ importers:
         version: 3.0.2
       '@0x-jerry/vscode-simple-server':
         specifier: ^0.3.1
-        version: 0.3.1
+        version: 0.3.2
       '@0x-jerry/x-release':
         specifier: ^2.2.2
         version: 2.2.2
@@ -56,8 +56,8 @@ packages:
   '@0x-jerry/utils@3.0.2':
     resolution: {integrity: sha512-tY1EfOS4T74ek31OqKL5mR4qQGqMI906TpHS4q3QYVdQ9r1UNPUlHRmnng5YhupVFC0A2k8FcLy9BkpYASBL+g==}
 
-  '@0x-jerry/vscode-simple-server@0.3.1':
-    resolution: {integrity: sha512-hpwH4RMhoIWMYvIIn39JPcava+VUNEZwdl9wgzZ8IukWdDxyEhNEB0yJo5Z6TR5obekU+xxzxMk1EzaQ4t1TTw==}
+  '@0x-jerry/vscode-simple-server@0.3.2':
+    resolution: {integrity: sha512-ChhpzsoqA/z+ljSd22FNvswzk1zN03TFakWkcAekR4GPEhQw2/sroS4rph5I8BazfnMFkCV3vez/iAP+RepwRg==}
     engines: {node: '>= 18'}
 
   '@0x-jerry/x-release@2.2.2':
@@ -2290,7 +2290,7 @@ snapshots:
       nanoid: 5.0.8
       picocolors: 1.1.1
 
-  '@0x-jerry/vscode-simple-server@0.3.1':
+  '@0x-jerry/vscode-simple-server@0.3.2':
     dependencies:
       '@0x-jerry/utils': 3.0.2
 
