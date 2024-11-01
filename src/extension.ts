@@ -73,13 +73,16 @@ export async function activate(context: ExtensionContext) {
       if (!vitepress.loaded) {
         const vitePressRoot = Uri.joinPath(workspaceFolder.uri, CONFIG.docsDir)
 
-        vitepress.loaded = true
         try {
           vitepress.config = await readVitePressConfig(vitePressRoot)
         } catch (error) {
           console.warn('load vitepress config failed', error)
         }
-      } else if (vitepress.config) {
+
+        vitepress.loaded = true
+      }
+
+      if (vitepress.config) {
         const base = vitepress.config.base || ''
 
         if (vitepress.config.srcDir) {
