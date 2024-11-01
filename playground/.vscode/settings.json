@@ -1,6 +1,6 @@
 {
   "vp.autoStart": true,
-  "vp.port": 4001,
+  "vp.port": 4032,
   "vp.docsDir": "",
   "vp.base": ""
 }
