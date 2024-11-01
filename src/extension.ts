@@ -2,8 +2,9 @@ import {
   commands,
   ThemeColor,
   Uri,
+  window,
   workspace,
-  type ExtensionContext,
+  type ExtensionContext
 } from 'vscode'
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { getConfig } from './config'
@@ -16,7 +17,7 @@ export async function activate(context: ExtensionContext) {
 
   const vitepress = {
     loaded: false,
-    config: undefined as UserConfig | undefined,
+    config: undefined as UserConfig | undefined
   }
 
   const simple = new SimpleServer({
@@ -30,8 +31,8 @@ export async function activate(context: ExtensionContext) {
 
       return {
         commandLine: `npx vitepress --host --port ${port} dev ${JSON.stringify(
-          docsDir,
-        )}`,
+          docsDir
+        )}`
       }
     },
     async resolveUrl(uri) {
@@ -60,7 +61,7 @@ export async function activate(context: ExtensionContext) {
         try {
           vitepress.config = await readVitePressConfig(vitePressRoot)
         } catch (error) {
-          console.warn('load vitepress config failed', error)
+          window.showWarningMessage(`Load VitePress config failed: ${error}`)
         }
 
         vitepress.loaded = true
@@ -70,7 +71,7 @@ export async function activate(context: ExtensionContext) {
         vitePressRoot: workspaceFolder.uri,
         currentFile: uri,
         config: vitepress.config,
-        docsDir,
+        docsDir
       })
 
       if (pathname == null) {
@@ -88,29 +89,29 @@ export async function activate(context: ExtensionContext) {
         text: '$(server) VitePress',
         tooltip: 'Click to stop',
         command: Commands.stop,
-        color: new ThemeColor('terminalCommandDecoration.successBackground'),
+        color: new ThemeColor('terminalCommandDecoration.successBackground')
       },
       stopped: {
         text: '$(server) VitePress',
         tooltip: 'Click to start',
-        command: Commands.start,
+        command: Commands.start
       },
       spinning: {
         text: '$(sync~spin) VitePress',
         tooltip: 'Starting the VitePress server',
-        command: Commands.stop,
-      },
-    },
+        command: Commands.stop
+      }
+    }
   })
 
   context.subscriptions.push(
-    commands.registerCommand(Commands.stop, () => simple.stop()),
+    commands.registerCommand(Commands.stop, () => simple.stop())
   )
   context.subscriptions.push(
-    commands.registerCommand(Commands.start, () => simple.start()),
+    commands.registerCommand(Commands.start, () => simple.start())
   )
   context.subscriptions.push(
-    commands.registerCommand(Commands.toggle, () => simple.toggle()),
+    commands.registerCommand(Commands.toggle, () => simple.toggle())
   )
 
   context.subscriptions.push(simple)
