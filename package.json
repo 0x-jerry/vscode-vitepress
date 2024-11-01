@@ -88,7 +88,7 @@
   },
   "devDependencies": {
     "@0x-jerry/utils": "^3.0.2",
-    "@0x-jerry/vscode-simple-server": "^0.3.1",
+    "@0x-jerry/vscode-simple-server": "^0.3.2",
     "@0x-jerry/x-release": "^2.2.2",
     "@types/node": "^22.8.6",
     "@types/vscode": "^1.60.0",
