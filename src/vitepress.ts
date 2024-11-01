@@ -13,6 +13,9 @@ export async function readVitePressConfig(vitePressRoot: Uri) {
         extensions: ['ts', 'mts', 'js', 'mjs'],
       },
     ],
+    importx: {
+      cache: false,
+    },
     merge: false,
   })
 
