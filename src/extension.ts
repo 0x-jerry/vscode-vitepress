@@ -23,15 +23,17 @@ export async function activate(context: ExtensionContext) {
   const simple = new SimpleServer({
     autoStart: getConfig('autoStart'),
     env: context,
-    async getStartCommand() {
+    async getStartServerCommand() {
       const port = getConfig('port')
       const docsDir = getConfig('docsDir')
       vitepress.loaded = false
       vitepress.config = null
 
-      return `npx vitepress --host --port ${port} dev ${JSON.stringify(
-        docsDir,
-      )}`
+      return {
+        commandLine: `npx vitepress --host --port ${port} dev ${JSON.stringify(
+          docsDir,
+        )}`,
+      }
     },
     async resolveUrl(uri) {
       const port = getConfig('port')
