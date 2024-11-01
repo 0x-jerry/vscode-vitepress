@@ -1,11 +1,24 @@
-import { commands, ThemeColor, workspace, type ExtensionContext } from 'vscode'
+import {
+  commands,
+  ThemeColor,
+  Uri,
+  workspace,
+  type ExtensionContext,
+} from 'vscode'
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { getConfig } from './config'
 import { Commands } from './commands'
 import path from 'path'
+import type { UserConfig } from 'vitepress'
+import { readVitePressConfig } from './vitepress'
 
 export async function activate(context: ExtensionContext) {
   console.log('activate')
+
+  const vitepress = {
+    loaded: false,
+    config: null as UserConfig | null,
+  }
 
   const simple = new SimpleServer({
     autoStart: getConfig('autoStart'),
@@ -13,9 +26,11 @@ export async function activate(context: ExtensionContext) {
     async getStartCommand() {
       const port = getConfig('port')
       const docsDir = getConfig('docsDir')
+      vitepress.loaded = false
+      vitepress.config = null
 
       return `npx vitepress --host --port ${port} dev ${JSON.stringify(
-        docsDir
+        docsDir,
       )}`
     },
     async resolveUrl(uri) {
@@ -38,7 +53,7 @@ export async function activate(context: ExtensionContext) {
 
       let relativeFilePath = path.relative(
         workspaceFolder.uri.fsPath,
-        uri.fsPath
+        uri.fsPath,
       )
 
       const CONFIG = {
@@ -46,7 +61,7 @@ export async function activate(context: ExtensionContext) {
         /**
          * VitePress base url
          */
-        base: getConfig('base')
+        base: '',
       }
 
       if (CONFIG.docsDir) {
@@ -57,9 +72,32 @@ export async function activate(context: ExtensionContext) {
         relativeFilePath = relativeFilePath.slice(CONFIG.docsDir.length)
       }
 
-      const route = path.join(CONFIG.base, relativeFilePath)
+      if (!vitepress.loaded) {
+        const vitePressRoot = Uri.joinPath(workspaceFolder.uri, CONFIG.docsDir)
 
-      const pathname = route
+        vitepress.loaded = true
+        try {
+          vitepress.config = await readVitePressConfig(vitePressRoot)
+        } catch (error) {
+          console.warn('load vitepress config failed', error)
+        }
+      } else if (vitepress.config) {
+        CONFIG.base = vitepress.config.base || ''
+
+        if (vitepress.config.srcDir) {
+          if (!relativeFilePath.startsWith(vitepress.config.srcDir)) {
+            return
+          }
+
+          relativeFilePath = relativeFilePath.slice(
+            vitepress.config.srcDir.length,
+          )
+        }
+
+        relativeFilePath = path.join(CONFIG.base, relativeFilePath)
+      }
+
+      const pathname = relativeFilePath
         .replaceAll('\\', '/')
         .replace('/index.md', '')
         .replace('index.md', '')
@@ -76,29 +114,29 @@ export async function activate(context: ExtensionContext) {
         text: '$(server) VitePress',
         tooltip: 'Click to stop',
         command: Commands.stop,
-        color: new ThemeColor('terminalCommandDecoration.successBackground')
+        color: new ThemeColor('terminalCommandDecoration.successBackground'),
       },
       stopped: {
         text: '$(server) VitePress',
         tooltip: 'Click to start',
-        command: Commands.start
+        command: Commands.start,
       },
       spinning: {
         text: '$(sync~spin) VitePress',
         tooltip: 'Starting the VitePress server',
-        command: Commands.stop
-      }
-    }
+        command: Commands.stop,
+      },
+    },
   })
 
   context.subscriptions.push(
-    commands.registerCommand(Commands.stop, () => simple.stop())
+    commands.registerCommand(Commands.stop, () => simple.stop()),
   )
   context.subscriptions.push(
-    commands.registerCommand(Commands.start, () => simple.start())
+    commands.registerCommand(Commands.start, () => simple.start()),
   )
   context.subscriptions.push(
-    commands.registerCommand(Commands.toggle, () => simple.toggle())
+    commands.registerCommand(Commands.toggle, () => simple.toggle()),
   )
 
   context.subscriptions.push(simple)
