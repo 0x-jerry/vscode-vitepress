@@ -58,10 +58,6 @@ export async function activate(context: ExtensionContext) {
 
       const CONFIG = {
         docsDir: getConfig('docsDir'),
-        /**
-         * VitePress base url
-         */
-        base: '',
       }
 
       if (CONFIG.docsDir) {
@@ -82,7 +78,7 @@ export async function activate(context: ExtensionContext) {
           console.warn('load vitepress config failed', error)
         }
       } else if (vitepress.config) {
-        CONFIG.base = vitepress.config.base || ''
+        const base = vitepress.config.base || ''
 
         if (vitepress.config.srcDir) {
           if (!relativeFilePath.startsWith(vitepress.config.srcDir)) {
@@ -94,7 +90,7 @@ export async function activate(context: ExtensionContext) {
           )
         }
 
-        relativeFilePath = path.join(CONFIG.base, relativeFilePath)
+        relativeFilePath = path.join(base, relativeFilePath)
       }
 
       const pathname = relativeFilePath
@@ -103,7 +99,7 @@ export async function activate(context: ExtensionContext) {
         .replace('index.md', '')
         .replace('.md', '')
 
-      url.pathname = pathname + (pathname === CONFIG.base ? '/' : '')
+      url.pathname = pathname + (pathname === vitepress.config?.base ? '/' : '')
 
       return url.toString()
     },

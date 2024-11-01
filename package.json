@@ -53,12 +53,6 @@
           "description": "VitePress docs folder, relative path to current workspace. example: \"docs\"\nYou need to restart VitePress preview server if you change this option",
           "type": "string",
           "default": ""
-        },
-        "vp.base": {
-          "scope": "machine-overridable",
-          "description": "VitePress base config, the base url of the docs. example: \"/blog\"",
-          "type": "string",
-          "default": ""
         }
       }
     },

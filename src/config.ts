@@ -7,11 +7,6 @@ export interface Config {
   docsDir?: string
 
   /**
-   * @default ''
-   */
-  base?: string
-
-  /**
    * @default 4001
    */
   port?: number
@@ -24,9 +19,8 @@ export interface Config {
 
 const defaultConfig: Required<Config> = {
   docsDir: '',
-  base: '',
   port: 4001,
-  autoStart: false
+  autoStart: false,
 }
 
 export function getConfig<Key extends keyof Config = keyof Config>(key: Key) {
