@@ -1,22 +1,39 @@
-import { commands, ThemeColor, workspace, type ExtensionContext } from 'vscode'
+import {
+  commands,
+  ThemeColor,
+  Uri,
+  window,
+  workspace,
+  type ExtensionContext,
+} from 'vscode'
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { getConfig } from './config'
 import { Commands } from './commands'
-import path from 'path'
+import type { UserConfig } from 'vitepress'
+import { readVitePressConfig, resolveVitePressUrl } from './vitepress'
 
 export async function activate(context: ExtensionContext) {
   console.log('activate')
 
+  const vitepress = {
+    loaded: false,
+    config: undefined as UserConfig | undefined,
+  }
+
   const simple = new SimpleServer({
     autoStart: getConfig('autoStart'),
     env: context,
-    async getStartCommand() {
+    async getStartServerCommand() {
       const port = getConfig('port')
       const docsDir = getConfig('docsDir')
+      vitepress.loaded = false
+      vitepress.config = undefined
 
-      return `npx vitepress --host --port ${port} dev ${JSON.stringify(
-        docsDir
-      )}`
+      return {
+        commandLine: `npx vitepress --host --port ${port} dev ${JSON.stringify(
+          docsDir,
+        )}`,
+      }
     },
     async resolveUrl(uri) {
       const port = getConfig('port')
@@ -36,36 +53,32 @@ export async function activate(context: ExtensionContext) {
         return
       }
 
-      let relativeFilePath = path.relative(
-        workspaceFolder.uri.fsPath,
-        uri.fsPath
-      )
+      const docsDir = getConfig('docsDir')
 
-      const CONFIG = {
-        docsDir: getConfig('docsDir'),
-        /**
-         * VitePress base url
-         */
-        base: getConfig('base')
-      }
+      if (!vitepress.loaded) {
+        const vitePressRoot = Uri.joinPath(workspaceFolder.uri, docsDir)
 
-      if (CONFIG.docsDir) {
-        if (!relativeFilePath.startsWith(CONFIG.docsDir)) {
-          return
+        try {
+          vitepress.config = await readVitePressConfig(vitePressRoot)
+        } catch (error) {
+          window.showWarningMessage(`Load VitePress config failed: ${error}`)
         }
 
-        relativeFilePath = relativeFilePath.slice(CONFIG.docsDir.length)
+        vitepress.loaded = true
       }
 
-      const route = path.join(CONFIG.base, relativeFilePath)
+      const pathname = resolveVitePressUrl({
+        vitePressRoot: workspaceFolder.uri,
+        currentFile: uri,
+        config: vitepress.config,
+        docsDir,
+      })
 
-      const pathname = route
-        .replaceAll('\\', '/')
-        .replace('/index.md', '')
-        .replace('index.md', '')
-        .replace('.md', '')
+      if (pathname == null) {
+        return
+      }
 
-      url.pathname = pathname + (pathname === CONFIG.base ? '/' : '')
+      url.pathname = pathname
 
       return url.toString()
     },
@@ -76,29 +89,29 @@ export async function activate(context: ExtensionContext) {
         text: '$(server) VitePress',
         tooltip: 'Click to stop',
         command: Commands.stop,
-        color: new ThemeColor('terminalCommandDecoration.successBackground')
+        color: new ThemeColor('terminalCommandDecoration.successBackground'),
       },
       stopped: {
         text: '$(server) VitePress',
         tooltip: 'Click to start',
-        command: Commands.start
+        command: Commands.start,
       },
       spinning: {
         text: '$(sync~spin) VitePress',
         tooltip: 'Starting the VitePress server',
-        command: Commands.stop
-      }
-    }
+        command: Commands.stop,
+      },
+    },
   })
 
   context.subscriptions.push(
-    commands.registerCommand(Commands.stop, () => simple.stop())
+    commands.registerCommand(Commands.stop, () => simple.stop()),
   )
   context.subscriptions.push(
-    commands.registerCommand(Commands.start, () => simple.start())
+    commands.registerCommand(Commands.start, () => simple.start()),
   )
   context.subscriptions.push(
-    commands.registerCommand(Commands.toggle, () => simple.toggle())
+    commands.registerCommand(Commands.toggle, () => simple.toggle()),
   )
 
   context.subscriptions.push(simple)
