@@ -41,7 +41,9 @@ export interface ResolveViteUrlOptions {
 export function resolveVitePressUrl(opt: ResolveViteUrlOptions) {
   const { vitePressRoot, currentFile, config, docsDir } = opt
 
-  let relativeFilePath = path.relative(vitePressRoot.fsPath, currentFile.fsPath)
+  let relativeFilePath = path
+    .relative(vitePressRoot.fsPath, currentFile.fsPath)
+    .replaceAll('\\', '/')
 
   if (docsDir) {
     if (!relativeFilePath.startsWith(docsDir)) {
@@ -49,6 +51,7 @@ export function resolveVitePressUrl(opt: ResolveViteUrlOptions) {
     }
 
     relativeFilePath = relativeFilePath.slice(docsDir.length)
+    relativeFilePath = removeLeadingSlash(relativeFilePath)
   }
 
   if (config) {
@@ -60,16 +63,18 @@ export function resolveVitePressUrl(opt: ResolveViteUrlOptions) {
       }
 
       relativeFilePath = relativeFilePath.slice(config.srcDir.length)
+      relativeFilePath = removeLeadingSlash(relativeFilePath)
     }
 
     relativeFilePath = path.join(base, relativeFilePath)
+    relativeFilePath = removeLeadingSlash(relativeFilePath)
   }
 
-  const pathname = relativeFilePath
-    .replaceAll('\\', '/')
-    .replace('/index.md', '')
-    .replace('index.md', '')
-    .replace('.md', '')
+  const pathname = relativeFilePath.replace('index.md', '').replace('.md', '')
 
   return pathname + (pathname === config?.base ? '/' : '')
+}
+
+function removeLeadingSlash(fsPath: string) {
+  return fsPath.replace(/^\//, '')
 }
