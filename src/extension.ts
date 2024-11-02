@@ -19,7 +19,7 @@ export async function activate(context: ExtensionContext) {
   let logger: LogOutputChannel | undefined
 
   if (isDebugMode) {
-    logger = window.createOutputChannel('VitePress-Preview', { log: true })
+    logger = window.createOutputChannel('VitePress Preview', { log: true })
     context.subscriptions.push(logger)
   }
 
@@ -32,6 +32,7 @@ export async function activate(context: ExtensionContext) {
     autoStart: getConfig('autoStart'),
     logger,
     env: context,
+    checkTimeout: 5_000,
     async getStartServerCommand() {
       const port = getConfig('port')
       const docsDir = getConfig('docsDir')
