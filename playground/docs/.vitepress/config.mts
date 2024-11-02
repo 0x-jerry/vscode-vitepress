@@ -5,6 +5,7 @@ export default defineConfig({
   title: 'My Blog',
   description: 'A Blog',
   base: '/docs',
+  srcDir: '',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
