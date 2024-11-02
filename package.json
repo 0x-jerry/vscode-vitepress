@@ -67,6 +67,11 @@
         "command": "vp.preview.stop",
         "category": "VitePress"
       }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "SimpleServer"
+      }
     ]
   },
   "scripts": {
