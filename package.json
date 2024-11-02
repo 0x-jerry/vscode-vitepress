@@ -53,6 +53,12 @@
           "description": "VitePress docs folder, relative path to current workspace. example: \"docs\"\nYou need to restart VitePress preview server if you change this option",
           "type": "string",
           "default": ""
+        },
+        "vp.debug": {
+          "scope": "window",
+          "description": "Enable debug mode.",
+          "type": "boolean",
+          "default": false
         }
       }
     },
@@ -93,7 +99,7 @@
   },
   "devDependencies": {
     "@0x-jerry/utils": "^3.0.2",
-    "@0x-jerry/vscode-simple-server": "^0.3.3",
+    "@0x-jerry/vscode-simple-server": "^0.3.6",
     "@0x-jerry/x-release": "^2.2.2",
     "@types/node": "^22.8.6",
     "@types/vscode": "^1.60.0",

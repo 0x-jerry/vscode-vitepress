@@ -5,6 +5,7 @@ import {
   window,
   workspace,
   type ExtensionContext,
+  type LogOutputChannel,
 } from 'vscode'
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { getConfig } from './config'
@@ -13,7 +14,14 @@ import type { UserConfig } from 'vitepress'
 import { readVitePressConfig, resolveVitePressUrl } from './vitepress'
 
 export async function activate(context: ExtensionContext) {
-  console.log('activate')
+  const isDebugMode = getConfig('debug')
+
+  let logger: LogOutputChannel | undefined
+
+  if (isDebugMode) {
+    logger = window.createOutputChannel('VitePress-Preview', { log: true })
+    context.subscriptions.push(logger)
+  }
 
   const vitepress = {
     loaded: false,
@@ -22,12 +30,15 @@ export async function activate(context: ExtensionContext) {
 
   const simple = new SimpleServer({
     autoStart: getConfig('autoStart'),
+    logger,
     env: context,
     async getStartServerCommand() {
       const port = getConfig('port')
       const docsDir = getConfig('docsDir')
       vitepress.loaded = false
       vitepress.config = undefined
+
+      logger?.info('VitePress server starting...')
 
       return {
         commandLine: `npx vitepress --host --port ${port} dev ${JSON.stringify(
@@ -59,6 +70,8 @@ export async function activate(context: ExtensionContext) {
         const vitePressRoot = Uri.joinPath(workspaceFolder.uri, docsDir)
 
         try {
+          logger?.info(`load VitePress config...`)
+
           vitepress.config = await readVitePressConfig(vitePressRoot)
         } catch (error) {
           window.showWarningMessage(`Load VitePress config failed: ${error}`)
@@ -73,6 +86,8 @@ export async function activate(context: ExtensionContext) {
         config: vitepress.config,
         docsDir,
       })
+
+      logger?.info(`resolve VitePress url: ${uri.fsPath} -> ${pathname}`)
 
       if (pathname == null) {
         return
@@ -117,6 +132,4 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(simple)
 }
 
-export function deactivate(): void {
-  console.log('deactivate')
-}
+export function deactivate(): void {}

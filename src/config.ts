@@ -15,12 +15,15 @@ export interface Config {
    * @default false
    */
   autoStart?: boolean
+
+  debug?: boolean
 }
 
 const defaultConfig: Required<Config> = {
   docsDir: '',
   port: 4001,
   autoStart: false,
+  debug: false,
 }
 
 export function getConfig<Key extends keyof Config = keyof Config>(key: Key) {

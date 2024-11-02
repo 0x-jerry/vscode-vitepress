@@ -1,5 +1,6 @@
 {
   "vp.autoStart": true,
   "vp.port": 4032,
-  "vp.docsDir": ""
+  "vp.docsDir": "",
+  "vp.debug": true
 }
