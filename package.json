@@ -106,7 +106,7 @@
     "@vscode/vsce": "^3.2.1",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
-    "unconfig": "^0.6.0",
+    "unconfig": "^7.0.0",
     "vitepress": "^1.4.3"
   }
 }
