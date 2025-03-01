@@ -101,7 +101,7 @@
     "@0x-jerry/vscode-simple-server": "^0.3.6",
     "@0x-jerry/x-release": "^2.2.2",
     "@types/node": "^22.13.8",
-    "@types/vscode": "^1.97.0",
+    "@types/vscode": "^1.60.0",
     "@vscode/vsce": "^3.2.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
